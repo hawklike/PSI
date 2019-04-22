@@ -5,12 +5,28 @@ import java.net.*;
 
 public class Server
 {
-    public void start(int port)
+    void start(int port)
     {
-        try { serverSocket = new ServerSocket(port); }
-        catch(IOException exc) { System.out.println("Unable to open the socket: " + exc); }
+        try{serverSocket = new ServerSocket(port);}
+        catch(IOException exc) {System.out.println("Unable to open the socket: " + exc);}
+        System.out.println("Server successfully started.");
     }
 
-    public ServerSocket getSocket() { return serverSocket; }
+
+    public void run()
+    {
+        try
+        {
+            while(true)
+            {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("New client connected.");
+                new ServerThread(clientSocket).start();
+            }
+        }
+        catch(IOException exc) {exc.getStackTrace();}
+    }
+
     private ServerSocket serverSocket;
+
 }

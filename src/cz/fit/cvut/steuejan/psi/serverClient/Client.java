@@ -1,17 +1,13 @@
 package cz.fit.cvut.steuejan.psi.serverClient;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Client
 {
-    public Client(Socket socket)
-    {
-        this.clientSocket = socket;
-    }
 
-    private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    public void start(String ipAddress, int port) throws IOException
+    {
+        Socket s = new Socket(ipAddress, port);
+    }
 }
