@@ -46,14 +46,18 @@ public class ServerThread extends Thread
                     if(inputName.second())
                     {
                         robot.name = inputName.first();
-                        if(robot.name.isEmpty()) { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                        if(robot.name.isEmpty())
+                        {
+                            state = Authentication.CLIENT_SYNTAX_ERROR;
+                            continue;
+                        }
                         hash = getHash(robot.name);
                         int clientCode = (hash + KEY_SERVER) % 65536;
                         sendOutput(String.valueOf(clientCode));
                         state = Authentication.CLIENT_CONFIRMATION;
-                        continue;
                     }
-                    else { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    break;
 
 
                 case CLIENT_CONFIRMATION:
@@ -62,13 +66,18 @@ public class ServerThread extends Thread
                     {
                         String input = inputConfirmCode.first();
                         int clientCode = convertToNumber(input);
-                        if(clientCode > 65536 || clientCode < 0) { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                        if(clientCode > 65536 || clientCode < 0)
+                        {
+                            state = Authentication.CLIENT_SYNTAX_ERROR;
+                            continue;
+                        }
                         int serverCode = (hash + KEY_CLIENT) % 65536;
-                        if(serverCode == clientCode) { state = Authentication.CLIENT_OK; continue; }
-                        else { state = Authentication.CLIENT_FAILED; continue; }
+                        if(serverCode == clientCode) state = Authentication.CLIENT_OK;
+                        else state = Authentication.CLIENT_FAILED;
 
                     }
-                    else { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    break;
 
                 case CLIENT_SYNTAX_ERROR:
                     sendOutput(Message.SERVER_SYNTAX_ERROR);
