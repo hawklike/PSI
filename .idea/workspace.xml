@@ -2,15 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23c3f5d2-d2ca-426c-815e-1215ba878525" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Pair.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tester" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,47 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="7" selection-start-column="7" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="46" selection-start-column="46" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="357">
+              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -82,7 +43,55 @@
         <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Message.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="272">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
@@ -101,8 +110,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -116,24 +125,25 @@
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/GreetServer.java" />
         <option value="$PROJECT_DIR$/PSI.iml" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ClientHandler.java" />
-        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" />
-        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java" />
-        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java" />
-        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java" />
-        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Pair.java" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Messages.java" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Message.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Orientation.java" />
+        <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java" />
         <option value="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1" />
-    <option name="y" value="-4" />
-    <option name="width" value="962" />
-    <option name="height" value="1022" />
+    <option name="x" value="1225" />
+    <option name="y" value="-3" />
+    <option name="width" value="7" />
+    <option name="height" value="88" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -211,6 +221,9 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",SHOW_LAMBDA" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -223,8 +236,16 @@
       <updated>1555429837293</updated>
       <workItem from="1555429843134" duration="6080000" />
       <workItem from="1555685931943" duration="11655000" />
-      <workItem from="1555943194467" duration="13772000" />
+      <workItem from="1555943194467" duration="29089000" />
     </task>
+    <task id="LOCAL-00001" summary="Implemented readInput method, some related changes happened">
+      <created>1556037361684</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1556037361684</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -236,7 +257,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31507000" />
+    <option name="totallyTimeSpent" value="46824000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -249,29 +270,28 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-4" width="1922" height="1022" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.50296736" visible="true" weight="0.18569905" />
-      <window_info id="Structure" order="1" sideWeight="0.49703264" side_tool="true" visible="true" weight="0.18569905" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4968254" weight="0.42214912" />
+      <window_info id="Structure" order="1" sideWeight="0.5031746" side_tool="true" weight="0.42214912" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection Results" weight="0.3295838" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.3295838" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32897604" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2657952" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39978212" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5208111" visible="true" weight="0.28213507" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.55496264" weight="0.38671023" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32934782" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32845894" />
+      <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32845894" />
-      <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="Version Control" order="12" weight="0.32897604" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4791889" side_tool="true" visible="true" weight="0.28213507" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.3295838" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32845894" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Version Control" order="13" weight="0.32897604" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -337,11 +357,48 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implemented readInput method, some related changes happened" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented readInput method, some related changes happened" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="clientCode" />
+      </configuration>
+    </watches-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PSI$Main.ic" NAME="Main Coverage Results" MODIFIED="1555432906170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/PSI$GreetServer.ic" NAME="GreetServer Coverage Results" MODIFIED="1555435783622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>cz.fit.cvut.steuejan.psi.serverClient.*</FILTER>
     </SUITE>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="setValue">
+      <expression>
+        <expression-string>&quot;Mnau!&quot;</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>state</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>serverCode == clientCode</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>clientCode &gt; 65536 || clientCode &lt; 0</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/out/production/PSI/cz/fit/cvut/steuejan/psi/serverClient/Main.class">
@@ -399,41 +456,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Pair.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar:///usr/lib/jvm/jdk-12/lib/src.zip!/java.base/java/lang/Thread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
+        <state relative-caret-position="206">
           <caret line="832" column="16" selection-start-line="832" selection-start-column="16" selection-end-line="832" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="46" selection-start-column="46" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="544">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Pair.java">
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
@@ -444,31 +501,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java">
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java">
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
+          <caret column="46" selection-start-column="46" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+        <state relative-caret-position="357">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

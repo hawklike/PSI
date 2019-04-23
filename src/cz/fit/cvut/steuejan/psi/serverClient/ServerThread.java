@@ -20,17 +20,86 @@ public class ServerThread extends Thread
     {
         try
         {
-            authenticate();
+            System.out.println(authenticate());
         }
-        catch(IOException e) { e.printStackTrace(); }
+        catch(IOException e)
+        {
+            System.out.println("Authentication failed!");
+            e.printStackTrace();
+        }
+
+        close();
     }
 
-    private void authenticate() throws IOException
+    private boolean authenticate() throws IOException
     {
+        int hash = 0;
         robot = new Robot();
-        robot.name = String.valueOf(getInput(in, 12).second());
-        System.out.print("Robot's name: ");
-        System.out.println(robot.name);
+        var state = Authentication.CLIENT_USERNAME;
+
+        while(true)
+        {
+            switch(state)
+            {
+                case CLIENT_USERNAME:
+                    var inputName = getInput(in, 12);
+                    if(inputName.second())
+                    {
+                        robot.name = inputName.first();
+                        if(robot.name.isEmpty()) { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                        hash = getHash(robot.name);
+                        int clientCode = (hash + KEY_SERVER) % 65536;
+                        sendOutput(String.valueOf(clientCode));
+                        state = Authentication.CLIENT_CONFIRMATION;
+                        continue;
+                    }
+                    else { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+
+
+                case CLIENT_CONFIRMATION:
+                    var inputConfirmCode = getInput(in, 7);
+                    if(inputConfirmCode.second())
+                    {
+                        String input = inputConfirmCode.first();
+                        int clientCode = convertToNumber(input);
+                        if(clientCode > 65536 || clientCode < 0) { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+                        int serverCode = (hash + KEY_CLIENT) % 65536;
+                        if(serverCode == clientCode) { state = Authentication.CLIENT_OK; continue; }
+                        else { state = Authentication.CLIENT_FAILED; continue; }
+
+                    }
+                    else { state = Authentication.CLIENT_SYNTAX_ERROR; continue; }
+
+                case CLIENT_SYNTAX_ERROR:
+                    sendOutput(Message.SERVER_SYNTAX_ERROR);
+                    return false;
+
+                case CLIENT_FAILED:
+                    sendOutput(Message.SERVER_LOGIN_FAILED);
+                    return false;
+
+                case CLIENT_OK:
+                    sendOutput(Message.SERVER_OK);
+                    return true;
+            }
+        }
+    }
+
+    private static int getHash(String name)
+    {
+        int hash = 0;
+        for(char letter : name.toCharArray())
+            hash += (int) letter;
+
+        return (hash * 1000) % 65536;
+    }
+
+    private static int convertToNumber(String text)
+    {
+        int number;
+        try { number = Integer.parseInt(text); }
+        catch(NumberFormatException exc) { return -1; }
+        return number;
     }
 
     private Pair<String, Boolean> getInput(BufferedReader in, int maxLen) throws IOException
@@ -41,20 +110,39 @@ public class ServerThread extends Thread
         //do unless c is \a
         while((c = in.read()) != Message.A)
         {
-            len++;
+            if(++len > maxLen) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
             response.append((char) c);
         }
 
-        //now \b should be read, if not, then throw syntax error
+        //now \b should be read, if not, then throw syntax error; also check correct length
         if(in.read() == Message.B) return ++len > maxLen ? new Pair<>(Message.SERVER_SYNTAX_ERROR, false) : new Pair<>(response.toString(), true);
         else return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+    }
+
+    private void sendOutput(String text) throws IOException
+    {
+        out.writeBytes(text + (char) Message.A + (char) Message.B);
+        out.flush();
+        System.out.println("Sent this message: " + text);
+    }
+
+    private void close()
+    {
+        try
+        {
+            System.out.println("Closing connection");
+            clientSocket.close();
+            out.close();
+            in.close();
+        }
+        catch (Exception e) { System.out.println("Unable to close the thread: " + e); }
     }
 
     private Socket clientSocket;
     private DataOutputStream out;
     private BufferedReader in;
     private Robot robot;
-    private final int KEY_SERVER = 54621;
-    private final int KEY_CLIENT = 45328;
+    private static final int KEY_SERVER = 54621;
+    private static final int KEY_CLIENT = 45328;
 
 }

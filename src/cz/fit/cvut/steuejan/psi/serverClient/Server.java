@@ -3,7 +3,7 @@ package cz.fit.cvut.steuejan.psi.serverClient;
 import java.io.IOException;
 import java.net.*;
 
-public class Server
+class Server
 {
     void start(int port)
     {
@@ -13,7 +13,7 @@ public class Server
     }
 
 
-    public void run()
+    void run()
     {
         try
         {
