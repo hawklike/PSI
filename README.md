@@ -1,10 +1,9 @@
-## BI-PSI
+# BI-PSI
 
-![Oppa](https://i.imgur.com/gKVE2cl.png)
+## How to test a project?
+Execute a binary file, which is foundable down in the task description. You must execute the file in a folder with your saved project files. You may add a right to execute, type chmod +x <name of a tester file> in a terminal. Execute by typing ./<name of a tester file> <port number = 3999> <ip address = usually 127.0.0.1>. Before you execute the previus command, you have to run a project.
 
-Praha & EU: Investujeme do vaší budoucnosti
-
-# <a name="domaci_uloha_c_1_-_tcp_server" id="domaci_uloha_c_1_-_tcp_server">Domácí úloha č. 1 - TCP server</a>
+# <a name="domaci_uloha_c_1_-_tcp_server" id="domaci_uloha_c_1_-_tcp_server">Domácí úloha č. 1 - TCP server (Czech language)</a>
 
 ## <a name="anotace" id="anotace">Anotace</a>
 
