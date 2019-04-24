@@ -722,7 +722,8 @@ K odevzdávání slouží speciální server (PSI bouda). **Každý student se n
 
 Link na odevzdávací server: [PSI bouda](https://bouda.felk.cvut.cz/ "https://bouda.felk.cvut.cz")
 
-<div class="noteimportant">Pokud jste nenalezli svůj oblíbený jazyk v nabídce, postěžujte si zde: cernyvi2@fit.cvut.cz.</div>
+<div class="noteimportan
+t">Pokud jste nenalezli svůj oblíbený jazyk v nabídce, postěžujte si zde: cernyvi2@fit.cvut.cz.</div>
 
 <div class="noteimportant">Pokud jste nedostali autentizační mail do 24 hodin, postěžujte si zde: cernyvi2@fit.cvut.cz.</div>
 
@@ -791,5 +792,3 @@ Je na každém studentovi, aby zajistil hladký průběh všech těchto kroků. 
 </div>
 
 </div>
-
-<div class="integration-bar" style="display: none; top: 79.7833px; left: 1543px;">[<span class="icon"></span><span class="title">Rozvrh</span>](https://timetable.fit.cvut.cz/)[<span class="icon"></span><span class="title">Informace o ICT</span>](https://ict.fit.cvut.cz/web)[<span class="icon"></span><span class="title">Webmail</span>](https://imap.fit.cvut.cz/)[<span class="icon"></span><span class="title">KOmponenta Studium</span>](https://kos.cvut.cz/)</div>
