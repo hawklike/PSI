@@ -20,7 +20,7 @@ public class ServerThread extends Thread
     {
         try
         {
-            System.out.println(authenticate());
+            System.out.println("Authentication was successful: " + authenticate());
         }
         catch(IOException e)
         {
@@ -136,7 +136,9 @@ public class ServerThread extends Thread
             }
         }
 
-        return new Pair<>(removeLastChar(response.toString()), true);
+        String input = removeLastChar(response.toString());
+        System.out.println("Input message: " + input);
+        return new Pair<>(input, true);
     }
 
     private void sendOutput(String text) throws IOException

@@ -20,6 +20,8 @@ class Server
             while(true)
             {
                 Socket clientSocket = serverSocket.accept();
+                System.out.println();
+                System.out.println("Running test " + ++nTests);
                 System.out.println("New client connected.");
                 new ServerThread(clientSocket).start();
             }
@@ -28,5 +30,6 @@ class Server
     }
 
     private ServerSocket serverSocket;
+    private int nTests = 0;
 
 }
