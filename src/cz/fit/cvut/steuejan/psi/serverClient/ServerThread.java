@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.regex.Pattern;
 
 public class ServerThread extends Thread
 {
@@ -20,15 +21,80 @@ public class ServerThread extends Thread
     {
         try
         {
-            System.out.println("Authentication was successful: " + authenticate());
+            if(!authenticate())  close();
+            else if(!navigate()) close();
+            else close();
         }
         catch(IOException e)
         {
             System.out.println("Authentication failed!");
             e.printStackTrace();
         }
+    }
 
-        close();
+    private boolean navigate() throws IOException
+    {
+        if(!setup())
+        {
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean setup() throws IOException
+    {
+        int prevPosX, prevPosY, actualPosX, actualPosY;
+        if(setPosition())
+        {
+            prevPosX = robot.position.posX;
+            prevPosY = robot.position.posY;
+        }
+        else return false;
+
+        if(setPosition())
+        {
+            actualPosX = robot.position.posX;
+            actualPosY = robot.position.posY;
+        }
+        else return false;
+
+        robot.orientation = setOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
+        System.out.println(robot.toString());
+        return true;
+    }
+
+    private Orientation setOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
+    {
+        if(prevPosX == actualPosX)
+            return actualPosY > prevPosY ? Orientation.UP : Orientation.DOWN;
+        else
+            return actualPosX > prevPosX ? Orientation.RIGHT : Orientation.LEFT;
+    }
+
+    private boolean setPosition() throws IOException
+    {
+        sendOutput(Message.SERVER_MOVE);
+        var input = getInput(in, 12);
+        if(input.second() && testClientOk(input.first()))
+        {
+            robot.position.posX = getPosition(input.first(), Message.POSX);
+            robot.position.posY = getPosition(input.first(), Message.POSY);
+            return true;
+        }
+        else return false;
+    }
+
+    private int getPosition(String str, int pos)
+    {
+        String[] elems = str.split(" ");
+        return convertToNumber(elems[pos]);
+    }
+
+    private boolean testClientOk(String str)
+    {
+        return Pattern.matches("OK -?[0-9] -?[0-9]", str);
     }
 
     private boolean authenticate() throws IOException
@@ -89,12 +155,13 @@ public class ServerThread extends Thread
 
                 case CLIENT_OK:
                     sendOutput(Message.SERVER_OK);
+                    System.out.println("Authentication was successful");
                     return true;
             }
         }
     }
 
-    private static int getHash(String name)
+    private int getHash(String name)
     {
         int hash = 0;
         for(char letter : name.toCharArray())
@@ -103,7 +170,7 @@ public class ServerThread extends Thread
         return (hash * 1000) % 65536;
     }
 
-    private static int convertToNumber(String text)
+    private int convertToNumber(String text)
     {
         int number;
         try { number = Integer.parseInt(text); }
@@ -111,7 +178,7 @@ public class ServerThread extends Thread
         return number;
     }
 
-    private static String removeLastChar(String str)
+    private String removeLastChar(String str)
     {
         return str.substring(0, str.length()-1);
     }

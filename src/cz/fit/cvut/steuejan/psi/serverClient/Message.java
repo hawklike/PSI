@@ -4,6 +4,8 @@ class Message
 {
     static final int A = 7;
     static final int B = 8;
+    static final int POSX = 1;
+    static final int POSY = 2;
     static final String SERVER_MOVE = "102 MOVE";
     static final String SERVER_TURN_LEFT = "103 TURN LEFT";
     static final String SERVER_TURN_RIGHT = "104 TURN RIGHT";
