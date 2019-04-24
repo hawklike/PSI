@@ -66,7 +66,7 @@ public class ServerThread extends Thread
                     {
                         String input = inputConfirmCode.first();
                         int clientCode = convertToNumber(input);
-                        if(clientCode > 65536 || clientCode < 0)
+                        if(clientCode > 65535 || clientCode < 0)
                         {
                             state = Authentication.CLIENT_SYNTAX_ERROR;
                             continue;
@@ -111,21 +111,32 @@ public class ServerThread extends Thread
         return number;
     }
 
+    private static String removeLastChar(String str)
+    {
+        return str.substring(0, str.length()-1);
+    }
+
     private Pair<String, Boolean> getInput(BufferedReader in, int maxLen) throws IOException
     {
         int c, len = 0;
         StringBuilder response = new StringBuilder();
+        boolean lastA = false;
 
-        //do unless c is \a
-        while((c = in.read()) != Message.A)
+        while(true)
         {
-            if(++len > maxLen) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
-            response.append((char) c);
+            c = in.read();
+
+            //long word or string doesn't contain \a\b
+            if(++len > maxLen || c == -1) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+            if(lastA && c == Message.B) break;
+            else
+            {
+                lastA = c == Message.A;
+                response.append((char) c);
+            }
         }
 
-        //now \b should be read, if not, then throw syntax error; also check correct length
-        if(in.read() == Message.B) return ++len > maxLen ? new Pair<>(Message.SERVER_SYNTAX_ERROR, false) : new Pair<>(response.toString(), true);
-        else return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+        return new Pair<>(removeLastChar(response.toString()), true);
     }
 
     private void sendOutput(String text) throws IOException
