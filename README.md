@@ -1,8 +1,8 @@
 # BI-PSI
 
 ## How to test a project?
-Execute a binary file, which is foundable down in the task description. You must execute the file in a folder with your saved project files. You may need to add a right to execute, type chmod +x <name of a tester file> in a terminal. Execute by typing:
-`./<name of a tester file> <port number = 3999> <ip address = usually 127.0.0.1> <particular tests>`
+Execute a binary file, which is foundable down in the task description. You must execute the file in a folder with your saved project files. You may need to add a right to execute, type chmod +x <name of a tester file> in a terminal. Execute by typing: <br/>
+`./<name of a tester file> <port number = 3999> <ip address = usually 127.0.0.1> <particular tests>` <br/>
 Before you execute the previus command, run a project.
 
 # <a name="domaci_uloha_c_1_-_tcp_server" id="domaci_uloha_c_1_-_tcp_server">Domácí úloha č. 1 - TCP server (Czech language)</a>
