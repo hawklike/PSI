@@ -9,8 +9,8 @@ class Robot
     @Override
     public String toString()
     {
-        return "Robot{" +
-                "position=" + position +
+        return "Robot {" +
+                "position=" + position.posX + " " + position.posY +
                 ", name='" + name + '\'' +
                 ", orientation=" + orientation +
                 '}';

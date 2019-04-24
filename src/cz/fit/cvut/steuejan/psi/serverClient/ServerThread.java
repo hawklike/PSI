@@ -79,6 +79,7 @@ public class ServerThread extends Thread
         var input = getInput(in, 12);
         if(input.second() && testClientOk(input.first()))
         {
+            robot.position = new Position();
             robot.position.posX = getPosition(input.first(), Message.POSX);
             robot.position.posY = getPosition(input.first(), Message.POSY);
             return true;
@@ -147,10 +148,12 @@ public class ServerThread extends Thread
 
                 case CLIENT_SYNTAX_ERROR:
                     sendOutput(Message.SERVER_SYNTAX_ERROR);
+                    System.out.println("Authentication wasn't successful");
                     return false;
 
                 case CLIENT_FAILED:
                     sendOutput(Message.SERVER_LOGIN_FAILED);
+                    System.out.println("Authentication wasn't successful");
                     return false;
 
                 case CLIENT_OK:
