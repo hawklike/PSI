@@ -25,47 +25,86 @@ public class ServerThread extends Thread
             else if(!navigate()) close();
             else close();
         }
-        catch(IOException e)
-        {
-            System.out.println("Authentication failed!");
-            e.printStackTrace();
-        }
+        catch(IOException e) { e.printStackTrace(); }
     }
 
     private boolean navigate() throws IOException
     {
-        if(!setup())
-        {
-            sendOutput(Message.SERVER_SYNTAX_ERROR);
-            return false;
-        }
-
+        if(!setupRobot())  return setSyntaxError();
+        if(!goToTopLeft()) return setSyntaxError();
         return true;
     }
 
-    private boolean setup() throws IOException
+    private boolean goToTopLeft() throws IOException
+    {
+        final int TOP = 2;
+        final int LEFT = -2;
+        while(!(robot.position.posX == LEFT && robot.position.posY == TOP))
+        {
+            //todo resolve a test 3 problem, the robot moves weirdly
+            if(!getToRightPosX(LEFT)) return false;
+            System.out.println(robot.toString());
+            if(!getToRightPosY(TOP)) return false;
+            System.out.println(robot.toString());
+        }
+        return true;
+    }
+
+    private boolean getToRightPosY(int TOP) throws IOException
+    {
+        robot.orientation = rotate(robot.position.posY < TOP ? Orientation.UP : Orientation.DOWN);
+        while(robot.position.posY != TOP)
+            if(!move()) return false;
+        return true;
+    }
+
+    private boolean getToRightPosX(int LEFT) throws IOException
+    {
+        robot.orientation = rotate(robot.position.posX < LEFT ? Orientation.RIGHT : Orientation.LEFT);
+        while(robot.position.posX != LEFT)
+            if(!move()) return false;
+        return true;
+    }
+
+    private Orientation rotate(Orientation targetDir) throws IOException
+    {
+        int turn = Orientation.convertToInt(robot.orientation) - Orientation.convertToInt(targetDir);
+        if(turn == 7) sendOutput(Message.SERVER_TURN_RIGHT);
+        else if(turn == -7) sendOutput(Message.SERVER_TURN_LEFT);
+        else if(turn % 3 == 0)
+        {
+            sendOutput(Message.SERVER_TURN_RIGHT);
+            sendOutput(Message.SERVER_TURN_RIGHT);
+        }
+        else if(Integer.signum(turn) == -1) sendOutput(Message.SERVER_TURN_RIGHT);
+        else if(Integer.signum(turn) == 1) sendOutput(Message.SERVER_TURN_LEFT);
+        return targetDir;
+    }
+
+    private boolean setupRobot() throws IOException
     {
         int prevPosX, prevPosY, actualPosX, actualPosY;
-        if(setPosition())
+        robot.position = new Position();
+        if(move())
         {
             prevPosX = robot.position.posX;
             prevPosY = robot.position.posY;
         }
         else return false;
 
-        if(setPosition())
+        if(move())
         {
             actualPosX = robot.position.posX;
             actualPosY = robot.position.posY;
         }
         else return false;
 
-        robot.orientation = setOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
+        robot.orientation = setupOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
         System.out.println(robot.toString());
         return true;
     }
 
-    private Orientation setOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
+    private Orientation setupOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
     {
         if(prevPosX == actualPosX)
             return actualPosY > prevPosY ? Orientation.UP : Orientation.DOWN;
@@ -73,13 +112,12 @@ public class ServerThread extends Thread
             return actualPosX > prevPosX ? Orientation.RIGHT : Orientation.LEFT;
     }
 
-    private boolean setPosition() throws IOException
+    private boolean move() throws IOException
     {
         sendOutput(Message.SERVER_MOVE);
         var input = getInput(in, 12);
         if(input.second() && testClientOk(input.first()))
         {
-            robot.position = new Position();
             robot.position.posX = getPosition(input.first(), Message.POSX);
             robot.position.posY = getPosition(input.first(), Message.POSY);
             return true;
@@ -96,6 +134,12 @@ public class ServerThread extends Thread
     private boolean testClientOk(String str)
     {
         return Pattern.matches("OK -?[0-9] -?[0-9]", str);
+    }
+
+    private boolean setSyntaxError() throws IOException
+    {
+        sendOutput(Message.SERVER_SYNTAX_ERROR);
+        return false;
     }
 
     private boolean authenticate() throws IOException
@@ -147,9 +191,8 @@ public class ServerThread extends Thread
                     break;
 
                 case CLIENT_SYNTAX_ERROR:
-                    sendOutput(Message.SERVER_SYNTAX_ERROR);
                     System.out.println("Authentication wasn't successful");
-                    return false;
+                    return setSyntaxError();
 
                 case CLIENT_FAILED:
                     sendOutput(Message.SERVER_LOGIN_FAILED);
