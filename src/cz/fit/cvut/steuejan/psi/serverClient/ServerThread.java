@@ -39,34 +39,33 @@ public class ServerThread extends Thread
     {
         final int TOP = 2;
         final int LEFT = -2;
-        while(!(robot.position.posX == LEFT && robot.position.posY == TOP))
+        if(!getToRightPosX(LEFT)) return false;
+        return getToRightPosY(TOP);
+    }
+
+    private boolean getToRightPosY(int TOP) throws IOException
+    {
+        if(!rotate(robot.position.posY < TOP ? Orientation.UP : Orientation.DOWN)) return false;
+        while(robot.position.posY != TOP)
         {
-            //todo resolve a test 3 problem, the robot moves weirdly
-            if(!getToRightPosX(LEFT)) return false;
-            System.out.println(robot.toString());
-            if(!getToRightPosY(TOP)) return false;
+            if(!move()) return false;
             System.out.println(robot.toString());
         }
         return true;
     }
 
-    private boolean getToRightPosY(int TOP) throws IOException
-    {
-        robot.orientation = rotate(robot.position.posY < TOP ? Orientation.UP : Orientation.DOWN);
-        while(robot.position.posY != TOP)
-            if(!move()) return false;
-        return true;
-    }
-
     private boolean getToRightPosX(int LEFT) throws IOException
     {
-        robot.orientation = rotate(robot.position.posX < LEFT ? Orientation.RIGHT : Orientation.LEFT);
+        if(!rotate(robot.position.posX < LEFT ? Orientation.RIGHT : Orientation.LEFT)) return false;
         while(robot.position.posX != LEFT)
+        {
             if(!move()) return false;
+            System.out.println(robot.toString());
+        }
         return true;
     }
 
-    private Orientation rotate(Orientation targetDir) throws IOException
+    private boolean rotate(Orientation targetDir) throws IOException
     {
         int turn = Orientation.convertToInt(robot.orientation) - Orientation.convertToInt(targetDir);
         if(turn == 7) sendOutput(Message.SERVER_TURN_RIGHT);
@@ -74,11 +73,13 @@ public class ServerThread extends Thread
         else if(turn % 3 == 0)
         {
             sendOutput(Message.SERVER_TURN_RIGHT);
+            if(!setPosition()) return false;
             sendOutput(Message.SERVER_TURN_RIGHT);
         }
         else if(Integer.signum(turn) == -1) sendOutput(Message.SERVER_TURN_RIGHT);
         else if(Integer.signum(turn) == 1) sendOutput(Message.SERVER_TURN_LEFT);
-        return targetDir;
+        robot.orientation = targetDir;
+        return setPosition();
     }
 
     private boolean setupRobot() throws IOException
@@ -115,6 +116,11 @@ public class ServerThread extends Thread
     private boolean move() throws IOException
     {
         sendOutput(Message.SERVER_MOVE);
+        return setPosition();
+    }
+
+    private boolean setPosition() throws IOException
+    {
         var input = getInput(in, 12);
         if(input.second() && testClientOk(input.first()))
         {
