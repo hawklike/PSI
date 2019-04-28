@@ -72,9 +72,9 @@ public class ServerThread extends Thread
         if(messageFound && input.second())
         {
             sendOutput(Message.SERVER_LOGOUT);
-            return new Response(true, true);
+            return new Response(false, true);
         }
-        else return new Response(input.second(), false);
+        else return new Response(!input.second(), false);
     }
 
     private Response goAxisX(Orientation direction, Position endPoint) throws IOException
@@ -198,7 +198,7 @@ public class ServerThread extends Thread
 
     private boolean testClientOk(String str)
     {
-        return Pattern.matches("OK -?[0-9] -?[0-9]", str);
+        return Pattern.matches("OK -?[0-9]{1,3} -?[0-9]{1,3}", str);
     }
 
     private boolean authenticate() throws IOException
