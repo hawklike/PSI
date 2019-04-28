@@ -5,6 +5,7 @@ class Robot
     Position position;
     String name;
     Orientation orientation;
+    boolean completed = false;
 
     @Override
     public String toString()

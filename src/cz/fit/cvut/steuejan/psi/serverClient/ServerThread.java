@@ -19,49 +19,103 @@ public class ServerThread extends Thread
     @Override
     public void run()
     {
-        try
-        {
-            if(!authenticate())  close();
-            else if(!navigate()) close();
-            else close();
-        }
+        try { if(authenticate()) navigate(); }
         catch(IOException e) { e.printStackTrace(); }
+        close();
     }
 
-    private boolean navigate() throws IOException
+    private void navigate() throws IOException
     {
-        if(!setupRobot())  return setSyntaxError();
-        if(!goToTopLeft()) return setSyntaxError();
-        return true;
+        if(!setupRobot())
+        {
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+            return;
+        }
+        if(!goToTopLeft())
+        {
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+            return;
+        }
+
+        if(!findMessage())
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+    }
+
+    private boolean findMessage() throws IOException
+    {
+        Response response = pickUpMessage();
+        if(response.syntaxError || response.messageFound)
+            return !response.syntaxError;
+
+        while(true)
+        {
+            response = goAxisX(Orientation.RIGHT, BOTTOM_RIGHT);
+            if(response.syntaxError || response.messageFound)
+                return !response.syntaxError;
+            response = goDown();
+            if(response.syntaxError || response.messageFound)
+                return !response.syntaxError;
+            response = goAxisX(Orientation.LEFT, TOP_LEFT);
+            if(response.syntaxError || response.messageFound)
+                return !response.syntaxError;
+            response = goDown();
+            if(response.syntaxError || response.messageFound)
+                return !response.syntaxError;
+        }
+    }
+
+    private Response pickUpMessage() throws IOException
+    {
+        sendOutput(Message.SERVER_PICK_UP);
+        var input = getInput(in, 100);
+        boolean messageFound = !input.first().isEmpty();
+        if(messageFound && input.second())
+        {
+            sendOutput(Message.SERVER_LOGOUT);
+            return new Response(true, true);
+        }
+        else return new Response(input.second(), false);
+    }
+
+    private Response goAxisX(Orientation direction, Position edge) throws IOException
+    {
+        if(!rotate(direction)) return new Response(true, false);
+        while(robot.position.posX != edge.posX)
+        {
+            if(!move()) return new Response(true, false);
+            Response response = pickUpMessage();
+            if(response.syntaxError || response.messageFound) return response;
+        }
+        return new Response(false, false);
+    }
+
+    private Response goDown()
+    {
+
+        return null;
     }
 
     private boolean goToTopLeft() throws IOException
     {
-        final int TOP = 2;
-        final int LEFT = -2;
-        if(!getToRightPosX(LEFT)) return false;
-        return getToRightPosY(TOP);
-    }
-
-    private boolean getToRightPosY(int TOP) throws IOException
-    {
-        if(!rotate(robot.position.posY < TOP ? Orientation.UP : Orientation.DOWN)) return false;
-        while(robot.position.posY != TOP)
-        {
-            if(!move()) return false;
-            System.out.println(robot.toString());
-        }
+        if(!getToRightPosX(TOP_LEFT.posX)) return false;
+        if(!getToRightPosY(TOP_LEFT.posY)) return false;
+        System.out.println(robot.toString());
         return true;
     }
 
-    private boolean getToRightPosX(int LEFT) throws IOException
+    private boolean getToRightPosY(int posY) throws IOException
     {
-        if(!rotate(robot.position.posX < LEFT ? Orientation.RIGHT : Orientation.LEFT)) return false;
-        while(robot.position.posX != LEFT)
-        {
+        if(!rotate(robot.position.posY < posY ? Orientation.UP : Orientation.DOWN)) return false;
+        while(robot.position.posY != posY)
             if(!move()) return false;
-            System.out.println(robot.toString());
-        }
+        return true;
+    }
+
+    private boolean getToRightPosX(int posX) throws IOException
+    {
+        if(!rotate(robot.position.posX < posX ? Orientation.RIGHT : Orientation.LEFT)) return false;
+        while(robot.position.posX != posX)
+            if(!move()) return false;
         return true;
     }
 
@@ -85,7 +139,7 @@ public class ServerThread extends Thread
     private boolean setupRobot() throws IOException
     {
         int prevPosX, prevPosY, actualPosX, actualPosY;
-        robot.position = new Position();
+        robot.position = new Position(0,0);
         if(move())
         {
             prevPosX = robot.position.posX;
@@ -101,7 +155,6 @@ public class ServerThread extends Thread
         else return false;
 
         robot.orientation = setupOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
-        System.out.println(robot.toString());
         return true;
     }
 
@@ -140,12 +193,6 @@ public class ServerThread extends Thread
     private boolean testClientOk(String str)
     {
         return Pattern.matches("OK -?[0-9] -?[0-9]", str);
-    }
-
-    private boolean setSyntaxError() throws IOException
-    {
-        sendOutput(Message.SERVER_SYNTAX_ERROR);
-        return false;
     }
 
     private boolean authenticate() throws IOException
@@ -197,8 +244,9 @@ public class ServerThread extends Thread
                     break;
 
                 case CLIENT_SYNTAX_ERROR:
+                    sendOutput(Message.SERVER_SYNTAX_ERROR);
                     System.out.println("Authentication wasn't successful");
-                    return setSyntaxError();
+                    return false;
 
                 case CLIENT_FAILED:
                     sendOutput(Message.SERVER_LOGIN_FAILED);
@@ -283,6 +331,8 @@ public class ServerThread extends Thread
     private DataOutputStream out;
     private BufferedReader in;
     private Robot robot;
+    private static final Position TOP_LEFT = new Position(-2,2);
+    private static final Position BOTTOM_RIGHT = new Position(2, -2);
     private static final int KEY_SERVER = 54621;
     private static final int KEY_CLIENT = 45328;
 
