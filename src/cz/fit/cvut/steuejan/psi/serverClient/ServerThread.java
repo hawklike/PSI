@@ -52,13 +52,13 @@ public class ServerThread extends Thread
             response = goAxisX(Orientation.RIGHT, BOTTOM_RIGHT);
             if(response.syntaxError || response.messageFound)
                 return !response.syntaxError;
-            response = goDown();
+            response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
             if(response.syntaxError || response.messageFound)
                 return !response.syntaxError;
             response = goAxisX(Orientation.LEFT, TOP_LEFT);
             if(response.syntaxError || response.messageFound)
                 return !response.syntaxError;
-            response = goDown();
+            response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
             if(response.syntaxError || response.messageFound)
                 return !response.syntaxError;
         }
@@ -77,10 +77,10 @@ public class ServerThread extends Thread
         else return new Response(input.second(), false);
     }
 
-    private Response goAxisX(Orientation direction, Position edge) throws IOException
+    private Response goAxisX(Orientation direction, Position endPoint) throws IOException
     {
         if(!rotate(direction)) return new Response(true, false);
-        while(robot.position.posX != edge.posX)
+        while(robot.position.posX != endPoint.posX)
         {
             if(!move()) return new Response(true, false);
             Response response = pickUpMessage();
@@ -89,10 +89,16 @@ public class ServerThread extends Thread
         return new Response(false, false);
     }
 
-    private Response goDown()
+    private Response goAxisY(Orientation direction, Position endPoint) throws IOException
     {
-
-        return null;
+        if(!rotate(direction)) return new Response(true, false);
+        while(robot.position.posY != endPoint.posY)
+        {
+            if(!move()) return new Response(true, false);
+            Response response = pickUpMessage();
+            if(response.syntaxError || response.messageFound) return response;
+        }
+        return new Response(false, false);
     }
 
     private boolean goToTopLeft() throws IOException
