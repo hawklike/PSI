@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.regex.Pattern;
 
-public class ServerThread extends Thread
+public class ServerThread implements Runnable
 {
     ServerThread(Socket clientSocket) throws IOException
     {
@@ -20,7 +20,7 @@ public class ServerThread extends Thread
     public void run()
     {
         try { if(authenticate()) navigate(); }
-        catch(IOException e) { e.printStackTrace(); }
+        catch(IOException e) { e.getStackTrace(); }
         close();
     }
 
@@ -206,6 +206,7 @@ public class ServerThread extends Thread
         int hash = 0;
         robot = new Robot();
         var state = Authentication.CLIENT_USERNAME;
+        clientSocket.setSoTimeout(TIMEOUT);
 
         while(true)
         {
@@ -298,6 +299,7 @@ public class ServerThread extends Thread
         while(true)
         {
             c = in.read();
+            clientSocket.setSoTimeout(TIMEOUT);
 
             //long word or string doesn't contain \a\b
             if(++len > maxLen || c == -1) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
@@ -330,7 +332,7 @@ public class ServerThread extends Thread
             out.close();
             in.close();
         }
-        catch (Exception e) { System.out.println("Unable to close the thread: " + e); }
+        catch (Exception e) { System.out.println("Unable to close a connection: " + e); }
     }
 
     private Socket clientSocket;
@@ -341,5 +343,6 @@ public class ServerThread extends Thread
     private static final Position BOTTOM_RIGHT = new Position(2, -2);
     private static final int KEY_SERVER = 54621;
     private static final int KEY_CLIENT = 45328;
+    private static final int TIMEOUT = 1000;
 
 }

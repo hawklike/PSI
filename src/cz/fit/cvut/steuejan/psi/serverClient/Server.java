@@ -12,7 +12,6 @@ class Server
         System.out.println("Server successfully started.");
     }
 
-
     void run()
     {
         try
@@ -23,7 +22,7 @@ class Server
                 System.out.println();
                 System.out.println("Running test " + ++nTests);
                 System.out.println("New client connected.");
-                new ServerThread(clientSocket).start();
+                new Thread(new ServerThread(clientSocket)).start();
             }
         }
         catch(IOException exc) {exc.getStackTrace();}
