@@ -144,32 +144,25 @@ public class ServerThread implements Runnable
 
     private boolean setupRobot() throws IOException
     {
-        int prevPosX, prevPosY, actualPosX, actualPosY;
+        Position prevPosition, actualPosition;
         robot.position = new Position(0,0);
-        if(move())
-        {
-            prevPosX = robot.position.posX;
-            prevPosY = robot.position.posY;
-        }
+
+        if(move()) prevPosition = robot.position;
         else return false;
 
-        if(move())
-        {
-            actualPosX = robot.position.posX;
-            actualPosY = robot.position.posY;
-        }
+        if(move()) actualPosition = robot.position;
         else return false;
 
-        robot.orientation = setupOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
+        robot.orientation = setupOrientation(prevPosition, actualPosition);
         return true;
     }
 
-    private Orientation setupOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
+    private Orientation setupOrientation(Position prevPosition, Position actualPosition)
     {
-        if(prevPosX == actualPosX)
-            return actualPosY > prevPosY ? Orientation.UP : Orientation.DOWN;
+        if(prevPosition.posX == actualPosition.posX)
+            return actualPosition.posY > prevPosition.posY ? Orientation.UP : Orientation.DOWN;
         else
-            return actualPosX > prevPosX ? Orientation.RIGHT : Orientation.LEFT;
+            return actualPosition.posX > prevPosition.posX ? Orientation.RIGHT : Orientation.LEFT;
     }
 
     private boolean move() throws IOException
@@ -183,14 +176,15 @@ public class ServerThread implements Runnable
         var input = getInput(in, 12);
         if(input.second() && testClientOk(input.first()))
         {
-            robot.position.posX = getPosition(input.first(), Message.POSX);
-            robot.position.posY = getPosition(input.first(), Message.POSY);
+            int posX = getPosition(input.first(), Message.POSX);
+            int posY = getPosition(input.first(), Message.POSY);
+            robot.position = new Position(posX, posY);
             return true;
         }
         else return false;
     }
 
-    private int getPosition(String str, int pos)
+    private static int getPosition(String str, int pos)
     {
         String[] elems = str.split(" ");
         return convertToNumber(elems[pos]);
@@ -277,7 +271,7 @@ public class ServerThread implements Runnable
         return (hash * 1000) % 65536;
     }
 
-    private int convertToNumber(String text)
+    private static int convertToNumber(String text)
     {
         int number;
         try { number = Integer.parseInt(text); }
