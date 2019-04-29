@@ -15,4 +15,6 @@ class Message
     static final String SERVER_LOGIN_FAILED = "300 LOGIN FAILED";
     static final String SERVER_SYNTAX_ERROR = "301 SYNTAX ERROR";
     static final String SERVER_LOGIC_ERROR = "302 LOGIC ERROR";
+    static final String CLIENT_RECHARGING = "RECHARGING";
+    static final String CLIENT_FULL_POWER = "FULL POWER";
 }

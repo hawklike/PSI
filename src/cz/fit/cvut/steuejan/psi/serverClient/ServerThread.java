@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.regex.Pattern;
 
 public class ServerThread implements Runnable
@@ -198,53 +199,57 @@ public class ServerThread implements Runnable
         return Pattern.matches("OK -?[0-9]{1,3} -?[0-9]{1,3}", str);
     }
 
+    private boolean recharging() throws IOException
+    {
+        clientSocket.setSoTimeout(TIMEOUT_RECHARGING);
+        var input = getInput(in, 12);
+        if(!input.second()) return false;
+        else return input.first().equals(Message.CLIENT_FULL_POWER);
+    }
+
     private boolean authenticate() throws IOException
     {
         int hash = 0;
         robot = new Robot();
         var state = Authentication.CLIENT_USERNAME;
-        clientSocket.setSoTimeout(TIMEOUT);
+        var expectedState = Authentication.CLIENT_USERNAME;
+        Pair<String, Boolean> input = null;
 
         while(true)
         {
+            if(state == Authentication.CLIENT_USERNAME || state == Authentication.CLIENT_CONFIRMATION)
+            {
+                input = getInput(in, 12);
+                if(!input.second()) state = Authentication.CLIENT_SYNTAX_ERROR;
+                else if(input.first().equals(Message.CLIENT_RECHARGING)) state = Authentication.CLIENT_RECHARGING;
+            }
+
             switch(state)
             {
                 case CLIENT_USERNAME:
-                    var inputName = getInput(in, 12);
-                    if(inputName.second())
-                    {
-                        robot.name = inputName.first();
-                        if(robot.name.isEmpty())
-                        {
-                            state = Authentication.CLIENT_SYNTAX_ERROR;
-                            continue;
-                        }
-                        hash = getHash(robot.name);
-                        int clientCode = (hash + KEY_SERVER) % 65536;
-                        sendOutput(String.valueOf(clientCode));
-                        state = Authentication.CLIENT_CONFIRMATION;
-                    }
-                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    robot.name = input.first();
+                    hash = getHash(robot.name);
+                    int clientCodeUsername = (hash + KEY_SERVER) % 65536;
+                    sendOutput(String.valueOf(clientCodeUsername));
+                    expectedState = state = Authentication.CLIENT_CONFIRMATION;
                     break;
 
-
                 case CLIENT_CONFIRMATION:
-                    var inputConfirmCode = getInput(in, 7);
-                    if(inputConfirmCode.second())
+                    String clientCodeStr = input.first();
+                    int clientCodeConfirm = convertToNumber(clientCodeStr);
+                    if(clientCodeConfirm > 65535 || clientCodeConfirm < 0 || clientCodeStr.length() > 5)
                     {
-                        String input = inputConfirmCode.first();
-                        int clientCode = convertToNumber(input);
-                        if(clientCode > 65535 || clientCode < 0)
-                        {
-                            state = Authentication.CLIENT_SYNTAX_ERROR;
-                            continue;
-                        }
-                        int serverCode = (hash + KEY_CLIENT) % 65536;
-                        if(serverCode == clientCode) state = Authentication.CLIENT_OK;
-                        else state = Authentication.CLIENT_FAILED;
-
+                        state = Authentication.CLIENT_SYNTAX_ERROR;
+                        continue;
                     }
-                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    int serverCode = (hash + KEY_CLIENT) % 65536;
+                    if(serverCode == clientCodeConfirm) expectedState = state = Authentication.CLIENT_OK;
+                    else state = Authentication.CLIENT_FAILED;
+                    break;
+
+                case CLIENT_RECHARGING:
+                    if(!recharging()) state = Authentication.CLIENT_SYNTAX_ERROR;
+                    else state = expectedState;
                     break;
 
                 case CLIENT_SYNTAX_ERROR:
@@ -344,5 +349,5 @@ public class ServerThread implements Runnable
     private static final int KEY_SERVER = 54621;
     private static final int KEY_CLIENT = 45328;
     private static final int TIMEOUT = 1000;
-
+    private static final int TIMEOUT_RECHARGING = 5000;
 }
