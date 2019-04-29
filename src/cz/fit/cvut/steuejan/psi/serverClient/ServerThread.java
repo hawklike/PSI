@@ -144,26 +144,32 @@ public class ServerThread implements Runnable
 
     private boolean setupRobot() throws IOException
     {
-        Position prevPosition, actualPosition;
+        int prevPosX, prevPosY, actualPosX, actualPosY;
         robot.position = new Position(0,0);
-
-        if(move()) prevPosition = robot.position;
+        if(move())
+        {
+            prevPosX = robot.position.posX;
+            prevPosY = robot.position.posY;
+        }
         else return false;
 
-        if(move()) actualPosition = robot.position;
+        if(move())
+        {
+            actualPosX = robot.position.posX;
+            actualPosY = robot.position.posY;
+        }
         else return false;
 
-        robot.orientation = setupOrientation(prevPosition, actualPosition);
+        robot.orientation = setupOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
         return true;
     }
 
-
-    private Orientation setupOrientation(Position prevPosition, Position actualPosition)
+    private Orientation setupOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
     {
-        if(prevPosition.posX == actualPosition.posX)
-            return actualPosition.posY > prevPosition.posY ? Orientation.UP : Orientation.DOWN;
+        if(prevPosX == actualPosX)
+            return actualPosY > prevPosY ? Orientation.UP : Orientation.DOWN;
         else
-            return actualPosition.posX > prevPosition.posX ? Orientation.RIGHT : Orientation.LEFT;
+            return actualPosX > prevPosX ? Orientation.RIGHT : Orientation.LEFT;
     }
 
     private boolean move() throws IOException
