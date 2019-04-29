@@ -150,8 +150,12 @@ public class ServerThread implements Runnable
         if(move()) prevPosition = robot.position;
         else return false;
 
-        if(move()) actualPosition = robot.position;
-        else return false;
+        do
+        {
+            if(move()) actualPosition = robot.position;
+            else return false;
+        }
+        while(prevPosition.equals(actualPosition));
 
         robot.orientation = setupOrientation(prevPosition, actualPosition);
         return true;
