@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.regex.Pattern;
 
-public class ServerThread extends Thread
+public class ServerThread implements Runnable
 {
     ServerThread(Socket clientSocket) throws IOException
     {
@@ -20,7 +20,7 @@ public class ServerThread extends Thread
     public void run()
     {
         try { if(authenticate()) navigate(); }
-        catch(IOException e) { e.printStackTrace(); }
+        catch(IOException e) { e.getStackTrace(); }
         close();
     }
 
@@ -144,32 +144,26 @@ public class ServerThread extends Thread
 
     private boolean setupRobot() throws IOException
     {
-        int prevPosX, prevPosY, actualPosX, actualPosY;
+        Position prevPosition, actualPosition;
         robot.position = new Position(0,0);
-        if(move())
-        {
-            prevPosX = robot.position.posX;
-            prevPosY = robot.position.posY;
-        }
+
+        if(move()) prevPosition = robot.position;
         else return false;
 
-        if(move())
-        {
-            actualPosX = robot.position.posX;
-            actualPosY = robot.position.posY;
-        }
+        if(move()) actualPosition = robot.position;
         else return false;
 
-        robot.orientation = setupOrientation(prevPosX, prevPosY, actualPosX, actualPosY);
+        robot.orientation = setupOrientation(prevPosition, actualPosition);
         return true;
     }
 
-    private Orientation setupOrientation(int prevPosX, int prevPosY, int actualPosX, int actualPosY)
+
+    private Orientation setupOrientation(Position prevPosition, Position actualPosition)
     {
-        if(prevPosX == actualPosX)
-            return actualPosY > prevPosY ? Orientation.UP : Orientation.DOWN;
+        if(prevPosition.posX == actualPosition.posX)
+            return actualPosition.posY > prevPosition.posY ? Orientation.UP : Orientation.DOWN;
         else
-            return actualPosX > prevPosX ? Orientation.RIGHT : Orientation.LEFT;
+            return actualPosition.posX > prevPosition.posX ? Orientation.RIGHT : Orientation.LEFT;
     }
 
     private boolean move() throws IOException
@@ -206,6 +200,7 @@ public class ServerThread extends Thread
         int hash = 0;
         robot = new Robot();
         var state = Authentication.CLIENT_USERNAME;
+        clientSocket.setSoTimeout(TIMEOUT);
 
         while(true)
         {
@@ -298,6 +293,7 @@ public class ServerThread extends Thread
         while(true)
         {
             c = in.read();
+            clientSocket.setSoTimeout(TIMEOUT);
 
             //long word or string doesn't contain \a\b
             if(++len > maxLen || c == -1) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
@@ -330,7 +326,7 @@ public class ServerThread extends Thread
             out.close();
             in.close();
         }
-        catch (Exception e) { System.out.println("Unable to close the thread: " + e); }
+        catch (Exception e) { System.out.println("Unable to close a connection: " + e); }
     }
 
     private Socket clientSocket;
@@ -341,5 +337,6 @@ public class ServerThread extends Thread
     private static final Position BOTTOM_RIGHT = new Position(2, -2);
     private static final int KEY_SERVER = 54621;
     private static final int KEY_CLIENT = 45328;
+    private static final int TIMEOUT = 1000;
 
 }
