@@ -50,17 +50,16 @@ public class ServerThread implements Runnable
         while(true)
         {
             response = goAxisX(Orientation.RIGHT, BOTTOM_RIGHT);
-            if(response.syntaxError || response.messageFound)
-                return !response.syntaxError;
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
             response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
-            if(response.syntaxError || response.messageFound)
-                return !response.syntaxError;
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
             response = goAxisX(Orientation.LEFT, TOP_LEFT);
-            if(response.syntaxError || response.messageFound)
-                return !response.syntaxError;
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
             response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
-            if(response.syntaxError || response.messageFound)
-                return !response.syntaxError;
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
         }
     }
 
@@ -266,7 +265,7 @@ public class ServerThread implements Runnable
         }
     }
 
-    private int getHash(String name)
+    private static int getHash(String name)
     {
         int hash = 0;
         for(char letter : name.toCharArray())
@@ -283,7 +282,7 @@ public class ServerThread implements Runnable
         return number;
     }
 
-    private String removeLastChar(String str)
+    private static String removeLastChar(String str)
     {
         return str.substring(0, str.length()-1);
     }
@@ -301,6 +300,9 @@ public class ServerThread implements Runnable
 
             //long word or string doesn't contain \a\b
             if(++len > maxLen || c == -1) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+            //maximum number of any chars, sequence \a\b should follow
+            if(len == maxLen && c != Message.B) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+
             if(lastA && c == Message.B) break;
             else
             {
