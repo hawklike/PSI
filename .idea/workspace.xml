@@ -8,7 +8,10 @@
     <bookmark url="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" line="194" mnemonic="B" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="23c3f5d2-d2ca-426c-815e-1215ba878525" name="Default Changelist" comment="" />
+    <list default="true" id="23c3f5d2-d2ca-426c-815e-1215ba878525" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/merge.sh" beforeDir="false" afterPath="$PROJECT_DIR$/merge.sh" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,8 +98,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="60" lean-forward="true" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
+            <state relative-caret-position="493">
+              <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -268,7 +271,7 @@
       <workItem from="1555429843134" duration="6080000" />
       <workItem from="1555685931943" duration="11655000" />
       <workItem from="1555943194467" duration="71843000" />
-      <workItem from="1556530095795" duration="24742000" />
+      <workItem from="1556530095795" duration="26005000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented readInput method, some related changes happened">
       <created>1556037361684</created>
@@ -408,7 +411,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="114320000" />
+    <option name="totallyTimeSpent" value="115583000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -747,8 +750,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="60" lean-forward="true" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
+        <state relative-caret-position="493">
+          <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

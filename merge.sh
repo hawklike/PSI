@@ -1,26 +1,28 @@
 nameFile="steuejan.txt"
-exists=0
+tmpFile="tmp"
 
-if [ -a "$nameFile" ]; then
-  exists=1
-fi
+echo "@author Jan Steuer" >> "$tmpFile"
+echo >> "$tmpFile"
 
-
-
-rm "$nameFile" 2>/dev/null
-
-echo "@author Jan Steuer" >> "$nameFile"
-echo >> "$nameFile"
-
-for file in $(ls *.java)
+for file in $(ls ./src/cz/fit/cvut/steuejan/psi/serverClient/*.java)
 do
-  echo "-----------------------$file-----------------------">> "$nameFile"
-  cat "$file" >> "$nameFile"
-  echo >> "$nameFile"
+  name=$(echo "$file" | rev | cut -d/ -f1 | rev)
+  echo "-----------------------"$name"-----------------------">> "$tmpFile"
+  cat "$file" >> "$tmpFile"
+  echo >> "$tmpFile"
 done
 
-if [ $exists -eq 1 ]; then
-  echo "File has been modified."
+if [ -a "$nameFile" ]; then
+  #files are the same
+  if diff "$nameFile" "$tmpFile" 2>/dev/null 1>&2; then
+    echo "Everything is up to date."
+    rm "$tmpFile"
+    exit 0;
+  else
+    echo "File has been modified."
+  fi
 else
   echo "File has been created."
 fi
+
+mv "$tmpFile" "$nameFile"
