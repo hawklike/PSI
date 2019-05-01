@@ -8,14 +8,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" line="194" mnemonic="B" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="23c3f5d2-d2ca-426c-815e-1215ba878525" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/LogicErrorException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Robot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/ServerThread.java" afterDir="false" />
-    </list>
+    <list default="true" id="23c3f5d2-d2ca-426c-815e-1215ba878525" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,20 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Position.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
+            <state relative-caret-position="391">
+              <caret line="23" column="60" lean-forward="true" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -284,7 +268,7 @@
       <workItem from="1555429843134" duration="6080000" />
       <workItem from="1555685931943" duration="11655000" />
       <workItem from="1555943194467" duration="71843000" />
-      <workItem from="1556530095795" duration="23468000" />
+      <workItem from="1556530095795" duration="24742000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented readInput method, some related changes happened">
       <created>1556037361684</created>
@@ -405,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1556565878692</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="All tests passed!">
+      <created>1556716418112</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1556716418112</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -417,7 +408,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113046000" />
+    <option name="totallyTimeSpent" value="114320000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -430,9 +421,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-4" width="1922" height="1022" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.56137186" visible="true" weight="0.31056562" />
-      <window_info id="Structure" order="1" sideWeight="0.43862817" side_tool="true" visible="true" weight="0.31056562" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5610933" visible="true" weight="0.31056562" />
+      <window_info id="Structure" order="1" sideWeight="0.43890676" side_tool="true" visible="true" weight="0.31056562" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -441,14 +433,14 @@
       <window_info id="Repositories" order="7" weight="0.32977587" />
       <window_info anchor="bottom" id="Inspection Results" order="0" sideWeight="0.4994664" weight="0.32897604" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49733192" weight="0.4291939" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5133405" visible="true" weight="0.39651415" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5133405" visible="true" weight="0.3224401" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.56083244" weight="0.38671023" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.32897604" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.48665956" side_tool="true" visible="true" weight="0.39651415" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.48665956" side_tool="true" visible="true" weight="0.3224401" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.4765208" side_tool="true" weight="0.28213507" />
       <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49733192" weight="0.3267974" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
@@ -536,7 +528,8 @@
     <MESSAGE value="The program successfully ends after all tests are passed" />
     <MESSAGE value="Optimization done" />
     <MESSAGE value="Tests 25, 26 has passed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests 25, 26 has passed" />
+    <MESSAGE value="All tests passed!" />
+    <option name="LAST_COMMIT_MESSAGE" value="All tests passed!" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PSI$Main.ic" NAME="Main Coverage Results" MODIFIED="1555432906170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
@@ -749,10 +742,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/steuejan.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/fit/cvut/steuejan/psi/serverClient/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
+        <state relative-caret-position="391">
+          <caret line="23" column="60" lean-forward="true" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

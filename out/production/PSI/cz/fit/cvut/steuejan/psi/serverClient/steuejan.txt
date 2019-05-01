@@ -1,0 +1,543 @@
+@author Jan Steuer
+
+-----------------------Authentication.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public enum Authentication
+{
+    CLIENT_USERNAME,
+    CLIENT_CONFIRMATION,
+    CLIENT_SYNTAX_ERROR,
+    CLIENT_FAILED,
+    CLIENT_OK
+}
+
+-----------------------Main.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public class Main
+{
+    private static final int PORT = 3999;
+
+    public static void main(String[] args)
+    {
+        System.out.println();
+        System.out.println();
+
+        Server server = new Server();
+        server.start(PORT);
+        server.run();
+    }
+}
+
+-----------------------Message.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+class Message
+{
+    static final int A = 7;
+    static final int B = 8;
+    static final int POSX = 1;
+    static final int POSY = 2;
+    static final String SERVER_MOVE = "102 MOVE";
+    static final String SERVER_TURN_LEFT = "103 TURN LEFT";
+    static final String SERVER_TURN_RIGHT = "104 TURN RIGHT";
+    static final String SERVER_PICK_UP = "105 GET MESSAGE";
+    static final String SERVER_LOGOUT = "106 LOGOUT";
+    static final String SERVER_OK = "200 OK";
+    static final String SERVER_LOGIN_FAILED = "300 LOGIN FAILED";
+    static final String SERVER_SYNTAX_ERROR = "301 SYNTAX ERROR";
+    static final String SERVER_LOGIC_ERROR = "302 LOGIC ERROR";
+}
+
+-----------------------Orientation.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public enum Orientation
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT;
+
+    public static int convertToInt(Orientation dir)
+    {
+        switch(dir)
+        {
+            case UP:
+                return 1;
+            case RIGHT:
+                return 2;
+            case DOWN:
+                return 4;
+            case LEFT:
+                return 8;
+        }
+        return 0;
+    }
+}
+-----------------------Pair.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public class Pair<L, R>
+{
+    public Pair(L left, R right)
+    {
+        this.left = left;
+        this.right = right;
+    }
+
+    private L left;
+    private R right;
+
+    public L first() { return left; }
+    public R second() { return right; }
+}
+
+-----------------------Position.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public class Position
+{
+    public Position(int posX, int posY)
+    {
+        this.posX = posX;
+        this.posY = posY;
+    }
+
+    public int posX;
+    public int posY;
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return posX == position.posX && posY == position.posY;
+    }
+}
+
+-----------------------Response.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+public class Response
+{
+    public Response(boolean syntaxError, boolean messageFound)
+    {
+        this.syntaxError = syntaxError;
+        this.messageFound = messageFound;
+    }
+
+    boolean syntaxError;
+    boolean messageFound;
+}
+
+-----------------------Robot.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+class Robot
+{
+    Position position;
+    String name;
+    Orientation orientation;
+    boolean completed = false;
+
+    @Override
+    public String toString()
+    {
+        return "Robot {" +
+                "position=" + position.posX + " " + position.posY +
+                ", name='" + name + '\'' +
+                ", orientation=" + orientation +
+                '}';
+    }
+}
+
+-----------------------Server.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+import java.io.IOException;
+import java.net.*;
+
+class Server
+{
+    void start(int port)
+    {
+        try{ serverSocket = new ServerSocket(port); }
+        catch(IOException exc) { System.out.println("Unable to open the socket: " + exc); }
+        System.out.println("Server successfully started.");
+    }
+
+    void run()
+    {
+        try
+        {
+            while(nTests++ < NUMBER_OF_TESTS)
+            {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println();
+                System.out.println("Running test " + nTests);
+                System.out.println("New client connected.");
+                new Thread(new ServerThread(clientSocket)).start();
+            }
+        }
+        catch(IOException exc) {exc.getStackTrace();}
+    }
+
+    private ServerSocket serverSocket;
+    private int nTests = 0;
+    private static final int NUMBER_OF_TESTS = 32;
+
+}
+
+-----------------------ServerThread.java-----------------------
+package cz.fit.cvut.steuejan.psi.serverClient;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.util.regex.Pattern;
+
+public class ServerThread implements Runnable
+{
+    ServerThread(Socket clientSocket) throws IOException
+    {
+        this.clientSocket = clientSocket;
+        this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
+        this.out = new DataOutputStream(this.clientSocket.getOutputStream());
+    }
+
+    @Override
+    public void run()
+    {
+        try { if(authenticate()) navigate(); }
+        catch(IOException e) { e.getStackTrace(); }
+        close();
+    }
+
+    private void navigate() throws IOException
+    {
+        if(!setupRobot())
+        {
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+            return;
+        }
+        if(!goToTopLeft())
+        {
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+            return;
+        }
+
+        if(!findMessage())
+            sendOutput(Message.SERVER_SYNTAX_ERROR);
+    }
+
+    private boolean findMessage() throws IOException
+    {
+        Response response = pickUpMessage();
+        if(response.syntaxError || response.messageFound)
+            return !response.syntaxError;
+
+        while(true)
+        {
+            response = goAxisX(Orientation.RIGHT, BOTTOM_RIGHT);
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
+            response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
+            response = goAxisX(Orientation.LEFT, TOP_LEFT);
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+
+            response = goAxisY(Orientation.DOWN, new Position(robot.position.posX, robot.position.posY-1));
+            if(response.syntaxError || response.messageFound) return !response.syntaxError;
+        }
+    }
+
+    private Response pickUpMessage() throws IOException
+    {
+        sendOutput(Message.SERVER_PICK_UP);
+        var input = getInput(in, 100);
+        boolean messageFound = !input.first().isEmpty();
+        if(messageFound && input.second())
+        {
+            sendOutput(Message.SERVER_LOGOUT);
+            return new Response(false, true);
+        }
+        else return new Response(!input.second(), false);
+    }
+
+    private Response goAxisX(Orientation direction, Position endPoint) throws IOException
+    {
+        if(!rotate(direction)) return new Response(true, false);
+        while(robot.position.posX != endPoint.posX)
+        {
+            if(!move()) return new Response(true, false);
+            Response response = pickUpMessage();
+            if(response.syntaxError || response.messageFound) return response;
+        }
+        return new Response(false, false);
+    }
+
+    private Response goAxisY(Orientation direction, Position endPoint) throws IOException
+    {
+        if(!rotate(direction)) return new Response(true, false);
+        while(robot.position.posY != endPoint.posY)
+        {
+            if(!move()) return new Response(true, false);
+            Response response = pickUpMessage();
+            if(response.syntaxError || response.messageFound) return response;
+        }
+        return new Response(false, false);
+    }
+
+    private boolean goToTopLeft() throws IOException
+    {
+        if(!getToRightPosX(TOP_LEFT.posX)) return false;
+        if(!getToRightPosY(TOP_LEFT.posY)) return false;
+        System.out.println(robot.toString());
+        return true;
+    }
+
+    private boolean getToRightPosY(int posY) throws IOException
+    {
+        if(!rotate(robot.position.posY < posY ? Orientation.UP : Orientation.DOWN)) return false;
+        while(robot.position.posY != posY)
+            if(!move()) return false;
+        return true;
+    }
+
+    private boolean getToRightPosX(int posX) throws IOException
+    {
+        if(!rotate(robot.position.posX < posX ? Orientation.RIGHT : Orientation.LEFT)) return false;
+        while(robot.position.posX != posX)
+            if(!move()) return false;
+        return true;
+    }
+
+    private boolean rotate(Orientation targetDir) throws IOException
+    {
+        int turn = Orientation.convertToInt(robot.orientation) - Orientation.convertToInt(targetDir);
+        if(turn == 7) sendOutput(Message.SERVER_TURN_RIGHT);
+        else if(turn == -7) sendOutput(Message.SERVER_TURN_LEFT);
+        else if(turn % 3 == 0)
+        {
+            sendOutput(Message.SERVER_TURN_RIGHT);
+            if(!setPosition()) return false;
+            sendOutput(Message.SERVER_TURN_RIGHT);
+        }
+        else if(Integer.signum(turn) == -1) sendOutput(Message.SERVER_TURN_RIGHT);
+        else if(Integer.signum(turn) == 1) sendOutput(Message.SERVER_TURN_LEFT);
+        robot.orientation = targetDir;
+        return setPosition();
+    }
+
+    private boolean setupRobot() throws IOException
+    {
+        Position prevPosition, actualPosition;
+        robot.position = new Position(0,0);
+
+        if(move()) prevPosition = robot.position;
+        else return false;
+
+        do
+        {
+            if(move()) actualPosition = robot.position;
+            else return false;
+        }
+        while(prevPosition.equals(actualPosition));
+
+        robot.orientation = setupOrientation(prevPosition, actualPosition);
+        return true;
+    }
+
+    private Orientation setupOrientation(Position prevPosition, Position actualPosition)
+    {
+        if(prevPosition.posX == actualPosition.posX)
+            return actualPosition.posY > prevPosition.posY ? Orientation.UP : Orientation.DOWN;
+        else
+            return actualPosition.posX > prevPosition.posX ? Orientation.RIGHT : Orientation.LEFT;
+    }
+
+    private boolean move() throws IOException
+    {
+        sendOutput(Message.SERVER_MOVE);
+        return setPosition();
+    }
+
+    private boolean setPosition() throws IOException
+    {
+        var input = getInput(in, 12);
+        if(input.second() && testClientOk(input.first()))
+        {
+            int posX = getPosition(input.first(), Message.POSX);
+            int posY = getPosition(input.first(), Message.POSY);
+            robot.position = new Position(posX, posY);
+            return true;
+        }
+        else return false;
+    }
+
+    private static int getPosition(String str, int pos)
+    {
+        String[] elems = str.split(" ");
+        return convertToNumber(elems[pos]);
+    }
+
+    private boolean testClientOk(String str)
+    {
+        return Pattern.matches("OK -?[0-9]{1,3} -?[0-9]{1,3}", str);
+    }
+
+    private boolean authenticate() throws IOException
+    {
+        int hash = 0;
+        robot = new Robot();
+        var state = Authentication.CLIENT_USERNAME;
+        clientSocket.setSoTimeout(TIMEOUT);
+
+        while(true)
+        {
+            switch(state)
+            {
+                case CLIENT_USERNAME:
+                    var inputName = getInput(in, 12);
+                    if(inputName.second())
+                    {
+                        robot.name = inputName.first();
+                        if(robot.name.isEmpty())
+                        {
+                            state = Authentication.CLIENT_SYNTAX_ERROR;
+                            continue;
+                        }
+                        hash = getHash(robot.name);
+                        int clientCode = (hash + KEY_SERVER) % 65536;
+                        sendOutput(String.valueOf(clientCode));
+                        state = Authentication.CLIENT_CONFIRMATION;
+                    }
+                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    break;
+
+
+                case CLIENT_CONFIRMATION:
+                    var inputConfirmCode = getInput(in, 7);
+                    if(inputConfirmCode.second())
+                    {
+                        String input = inputConfirmCode.first();
+                        int clientCode = convertToNumber(input);
+                        if(clientCode > 65535 || clientCode < 0)
+                        {
+                            state = Authentication.CLIENT_SYNTAX_ERROR;
+                            continue;
+                        }
+                        int serverCode = (hash + KEY_CLIENT) % 65536;
+                        if(serverCode == clientCode) state = Authentication.CLIENT_OK;
+                        else state = Authentication.CLIENT_FAILED;
+
+                    }
+                    else state = Authentication.CLIENT_SYNTAX_ERROR;
+                    break;
+
+                case CLIENT_SYNTAX_ERROR:
+                    sendOutput(Message.SERVER_SYNTAX_ERROR);
+                    System.out.println("Authentication wasn't successful");
+                    return false;
+
+                case CLIENT_FAILED:
+                    sendOutput(Message.SERVER_LOGIN_FAILED);
+                    System.out.println("Authentication wasn't successful");
+                    return false;
+
+                case CLIENT_OK:
+                    sendOutput(Message.SERVER_OK);
+                    System.out.println("Authentication was successful");
+                    return true;
+            }
+        }
+    }
+
+    private static int getHash(String name)
+    {
+        int hash = 0;
+        for(char letter : name.toCharArray())
+            hash += (int) letter;
+
+        return (hash * 1000) % 65536;
+    }
+
+    private static int convertToNumber(String text)
+    {
+        int number;
+        try { number = Integer.parseInt(text); }
+        catch(NumberFormatException exc) { return -1; }
+        return number;
+    }
+
+    private static String removeLastChar(String str)
+    {
+        return str.substring(0, str.length()-1);
+    }
+
+    private Pair<String, Boolean> getInput(BufferedReader in, int maxLen) throws IOException
+    {
+        int c, len = 0;
+        StringBuilder response = new StringBuilder();
+        boolean lastA = false;
+
+        while(true)
+        {
+            c = in.read();
+            clientSocket.setSoTimeout(TIMEOUT);
+
+            //long word or string doesn't contain \a\b
+            if(++len > maxLen || c == -1) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+            //maximum number of any chars, sequence \a\b should follow
+            if(len == maxLen && c != Message.B) return new Pair<>(Message.SERVER_SYNTAX_ERROR, false);
+
+            if(lastA && c == Message.B) break;
+            else
+            {
+                lastA = c == Message.A;
+                response.append((char) c);
+            }
+        }
+
+        String input = removeLastChar(response.toString());
+        System.out.println("Input message: " + input);
+        return new Pair<>(input, true);
+    }
+
+    private void sendOutput(String text) throws IOException
+    {
+        out.writeBytes(text + (char) Message.A + (char) Message.B);
+        out.flush();
+        System.out.println("Sent this message: " + text);
+    }
+
+    private void close()
+    {
+        try
+        {
+            System.out.println("Closing connection");
+            clientSocket.close();
+            out.close();
+            in.close();
+        }
+        catch (Exception e) { System.out.println("Unable to close a connection: " + e); }
+    }
+
+    private Socket clientSocket;
+    private DataOutputStream out;
+    private BufferedReader in;
+    private Robot robot;
+    private static final Position TOP_LEFT = new Position(-2,2);
+    private static final Position BOTTOM_RIGHT = new Position(2, -2);
+    private static final int KEY_SERVER = 54621;
+    private static final int KEY_CLIENT = 45328;
+    private static final int TIMEOUT = 1000;
+
+}
+
