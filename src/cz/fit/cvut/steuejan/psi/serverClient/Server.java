@@ -30,6 +30,6 @@ class Server
 
     private ServerSocket serverSocket;
     private int nTests = 0;
-    private static final int NUMBER_OF_TESTS = 32;
+    private static final int NUMBER_OF_TESTS = 35;
 
 }

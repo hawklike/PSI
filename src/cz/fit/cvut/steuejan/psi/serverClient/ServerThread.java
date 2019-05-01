@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.regex.Pattern;
 
 public class ServerThread implements Runnable
@@ -22,10 +21,16 @@ public class ServerThread implements Runnable
     {
         try { if(authenticate()) navigate(); }
         catch(IOException e) { e.getStackTrace(); }
+        catch(LogicErrorException e)
+        {
+            try { sendOutput(Message.SERVER_LOGIC_ERROR); }
+            catch(IOException ex) { ex.printStackTrace(); }
+            System.out.println("Logic error occurred.");
+        }
         close();
     }
 
-    private void navigate() throws IOException
+    private void navigate() throws IOException, LogicErrorException
     {
         if(!setupRobot())
         {
@@ -42,7 +47,7 @@ public class ServerThread implements Runnable
             sendOutput(Message.SERVER_SYNTAX_ERROR);
     }
 
-    private boolean findMessage() throws IOException
+    private boolean findMessage() throws IOException, LogicErrorException
     {
         Response response = pickUpMessage();
         if(response.syntaxError || response.messageFound)
@@ -68,6 +73,13 @@ public class ServerThread implements Runnable
     {
         sendOutput(Message.SERVER_PICK_UP);
         var input = getInput(in, 100);
+
+        if(input.first().equals(Message.CLIENT_RECHARGING) && input.second())
+        {
+            if(!recharging()) return new Response(true, false);
+            else input = getInput(in, 100);
+        }
+
         boolean messageFound = !input.first().isEmpty();
         if(messageFound && input.second())
         {
@@ -77,7 +89,7 @@ public class ServerThread implements Runnable
         else return new Response(!input.second(), false);
     }
 
-    private Response goAxisX(Orientation direction, Position endPoint) throws IOException
+    private Response goAxisX(Orientation direction, Position endPoint) throws IOException, LogicErrorException
     {
         if(!rotate(direction)) return new Response(true, false);
         while(robot.position.posX != endPoint.posX)
@@ -89,7 +101,7 @@ public class ServerThread implements Runnable
         return new Response(false, false);
     }
 
-    private Response goAxisY(Orientation direction, Position endPoint) throws IOException
+    private Response goAxisY(Orientation direction, Position endPoint) throws IOException, LogicErrorException
     {
         if(!rotate(direction)) return new Response(true, false);
         while(robot.position.posY != endPoint.posY)
@@ -101,7 +113,7 @@ public class ServerThread implements Runnable
         return new Response(false, false);
     }
 
-    private boolean goToTopLeft() throws IOException
+    private boolean goToTopLeft() throws IOException, LogicErrorException
     {
         if(!getToRightPosX(TOP_LEFT.posX)) return false;
         if(!getToRightPosY(TOP_LEFT.posY)) return false;
@@ -109,7 +121,7 @@ public class ServerThread implements Runnable
         return true;
     }
 
-    private boolean getToRightPosY(int posY) throws IOException
+    private boolean getToRightPosY(int posY) throws IOException, LogicErrorException
     {
         if(!rotate(robot.position.posY < posY ? Orientation.UP : Orientation.DOWN)) return false;
         while(robot.position.posY != posY)
@@ -117,7 +129,7 @@ public class ServerThread implements Runnable
         return true;
     }
 
-    private boolean getToRightPosX(int posX) throws IOException
+    private boolean getToRightPosX(int posX) throws IOException, LogicErrorException
     {
         if(!rotate(robot.position.posX < posX ? Orientation.RIGHT : Orientation.LEFT)) return false;
         while(robot.position.posX != posX)
@@ -125,9 +137,11 @@ public class ServerThread implements Runnable
         return true;
     }
 
-    private boolean rotate(Orientation targetDir) throws IOException
+    private boolean rotate(Orientation targetDir) throws IOException, LogicErrorException
     {
+        System.out.println("Target direction: " + targetDir);
         int turn = Orientation.convertToInt(robot.orientation) - Orientation.convertToInt(targetDir);
+        if(turn == 0) return true;
         if(turn == 7) sendOutput(Message.SERVER_TURN_RIGHT);
         else if(turn == -7) sendOutput(Message.SERVER_TURN_LEFT);
         else if(turn % 3 == 0)
@@ -142,7 +156,7 @@ public class ServerThread implements Runnable
         return setPosition();
     }
 
-    private boolean setupRobot() throws IOException
+    private boolean setupRobot() throws IOException, LogicErrorException
     {
         Position prevPosition, actualPosition;
         robot.position = new Position(0,0);
@@ -158,6 +172,7 @@ public class ServerThread implements Runnable
         while(prevPosition.equals(actualPosition));
 
         robot.orientation = setupOrientation(prevPosition, actualPosition);
+        System.out.println(robot.toString());
         return true;
     }
 
@@ -169,20 +184,28 @@ public class ServerThread implements Runnable
             return actualPosition.posX > prevPosition.posX ? Orientation.RIGHT : Orientation.LEFT;
     }
 
-    private boolean move() throws IOException
+    private boolean move() throws IOException, LogicErrorException
     {
         sendOutput(Message.SERVER_MOVE);
         return setPosition();
     }
 
-    private boolean setPosition() throws IOException
+    private boolean setPosition() throws IOException, LogicErrorException
     {
         var input = getInput(in, 12);
+
+        if(input.first().equals(Message.CLIENT_RECHARGING) && input.second())
+        {
+            if(!recharging()) throw new LogicErrorException();
+            else input = getInput(in, 12);
+        }
+
         if(input.second() && testClientOk(input.first()))
         {
             int posX = getPosition(input.first(), Message.POSX);
             int posY = getPosition(input.first(), Message.POSY);
             robot.position = new Position(posX, posY);
+            System.out.println(robot.toString());
             return true;
         }
         else return false;
@@ -248,9 +271,14 @@ public class ServerThread implements Runnable
                     break;
 
                 case CLIENT_RECHARGING:
-                    if(!recharging()) state = Authentication.CLIENT_SYNTAX_ERROR;
+                    if(!recharging()) state = Authentication.SERVER_LOGIC_ERROR;
                     else state = expectedState;
                     break;
+
+                case SERVER_LOGIC_ERROR:
+                    sendOutput(Message.SERVER_LOGIC_ERROR);
+                    System.out.println("Authentication wasn't successful");
+                    return false;
 
                 case CLIENT_SYNTAX_ERROR:
                     sendOutput(Message.SERVER_SYNTAX_ERROR);

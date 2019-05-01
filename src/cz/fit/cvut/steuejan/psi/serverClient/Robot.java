@@ -11,8 +11,7 @@ class Robot
     public String toString()
     {
         return "Robot {" +
-                "position=" + position.posX + " " + position.posY +
-                ", name='" + name + '\'' +
+                "position= " + position.posX + " " + position.posY +
                 ", orientation=" + orientation +
                 '}';
     }

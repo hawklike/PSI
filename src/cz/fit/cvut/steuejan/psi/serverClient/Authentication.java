@@ -8,5 +8,5 @@ public enum Authentication
     CLIENT_FAILED,
     CLIENT_OK,
     CLIENT_RECHARGING,
-    CLIENT_FULL_POWER
+    SERVER_LOGIC_ERROR
 }
