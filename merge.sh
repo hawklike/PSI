@@ -1,22 +1,24 @@
-nameFile="steuejan.txt"
-tmpFile="tmp"
+fileName="steuejan.txt"
+relativeAddress="./src/cz/fit/cvut/steuejan/psi/serverClient"
+language="java"
+author="Jan Steuer"
 
-echo "@author Jan Steuer" >> "$tmpFile"
-echo >> "$tmpFile"
+echo "@author $author" >> tmp
+echo >> tmp
 
-for file in $(ls ./src/cz/fit/cvut/steuejan/psi/serverClient/*.java)
+for file in $(ls "$relativeAddress"/*."$language")
 do
   name=$(echo "$file" | rev | cut -d/ -f1 | rev)
-  echo "-----------------------"$name"-----------------------">> "$tmpFile"
-  cat "$file" >> "$tmpFile"
-  echo >> "$tmpFile"
+  echo "-----------------------"$name"-----------------------" >> tmp
+  cat "$file" >> tmp
+  echo >> tmp
 done
 
-if [ -a "$nameFile" ]; then
+if [ -a "$fileName" ]; then
   #files are the same
-  if diff "$nameFile" "$tmpFile" 2>/dev/null 1>&2; then
+  if diff "$fileName" tmp 2>/dev/null 1>&2; then
     echo "Everything is up to date."
-    rm "$tmpFile"
+    rm tmp
     exit 0;
   else
     echo "File has been modified."
@@ -25,4 +27,4 @@ else
   echo "File has been created."
 fi
 
-mv "$tmpFile" "$nameFile"
+mv tmp "$fileName"
