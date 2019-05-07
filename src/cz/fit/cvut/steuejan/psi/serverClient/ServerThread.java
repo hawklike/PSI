@@ -69,14 +69,14 @@ public class ServerThread implements Runnable
         }
     }
 
-    private Response pickUpMessage() throws IOException
+    private Response pickUpMessage() throws IOException, LogicErrorException
     {
         sendOutput(Message.SERVER_PICK_UP);
         var input = getInput(in, 100);
 
         if(input.first().equals(Message.CLIENT_RECHARGING) && input.second())
         {
-            if(!recharging()) return new Response(true, false);
+            if(!recharging()) throw new LogicErrorException();
             else input = getInput(in, 100);
         }
 
@@ -230,7 +230,7 @@ public class ServerThread implements Runnable
         else return input.first().equals(Message.CLIENT_FULL_POWER);
     }
 
-    private boolean authenticate() throws IOException
+    private boolean authenticate() throws IOException, LogicErrorException
     {
         int hash = 0;
         robot = new Robot();
@@ -271,14 +271,9 @@ public class ServerThread implements Runnable
                     break;
 
                 case CLIENT_RECHARGING:
-                    if(!recharging()) state = Authentication.SERVER_LOGIC_ERROR;
-                    else state = expectedState;
+                    if(!recharging()) throw new LogicErrorException();
+                    state = expectedState;
                     break;
-
-                case SERVER_LOGIC_ERROR:
-                    sendOutput(Message.SERVER_LOGIC_ERROR);
-                    System.out.println("Authentication wasn't successful");
-                    return false;
 
                 case CLIENT_SYNTAX_ERROR:
                     sendOutput(Message.SERVER_SYNTAX_ERROR);
